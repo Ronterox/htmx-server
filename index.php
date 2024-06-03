@@ -4,8 +4,9 @@ include 'view.php';
 
 session_start();
 
-$counter = $_SESSION['counter'] ?? 0;
+$contact = [
+    'name' => 'John Doe',
+    'email' => 'jd@email.com'
+];
 
-view('index.html', 'all', ['count' => $counter]);
-
-$_SESSION['counter'] = $counter;
+view('index.html', 'all', ['contacts' => [$contact]]);
