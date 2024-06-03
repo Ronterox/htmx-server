@@ -1,5 +1,10 @@
 <?php
 
+function single_line($file)
+{
+    return preg_replace('/\s+/s', ' ', preg_replace('/[^\S ]+/s', '', $file));
+}
+
 function view($file, $block = 'all', $data = [])
 {
     $path = __DIR__ . '/html/' . $file;
@@ -38,7 +43,7 @@ function view($file, $block = 'all', $data = [])
     }
 
     @mkdir(__DIR__ . '/cache');
-    file_put_contents($cache, $file);
+    file_put_contents($cache, single_line($file));
 
     require $cache;
 }
