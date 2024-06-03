@@ -10,5 +10,7 @@ $contact = [
 ];
 
 $contacts = $_SESSION['contacts'] ?? [$contact];
+
 view('index.html', 'all', compact('contacts'));
+
 $_SESSION['contacts'] = $contacts;
