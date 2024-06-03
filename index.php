@@ -5,6 +5,12 @@ function view($file, $data = []) {
     $cache = __DIR__ . '/cache/' . md5($file) . '.php';
 
     extract($data);
+
+    if (file_exists($cache) && filemtime($cache) >= filemtime($path)) {
+        require $cache;
+        return;
+    }
+
     $file = file_get_contents($path);
     $file = preg_replace('/{{\s*(.*?)\s*}}/', '<?php echo $1; ?>', $file);
 
