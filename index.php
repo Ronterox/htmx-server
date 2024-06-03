@@ -9,4 +9,6 @@ $contact = [
     'email' => 'jd@email.com'
 ];
 
-view('index.html', 'all', ['contacts' => [$contact]]);
+$contacts = $_SESSION['contacts'] ?? [$contact];
+view('index.html', 'all', compact('contacts'));
+$_SESSION['contacts'] = $contacts;

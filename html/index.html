@@ -9,31 +9,45 @@
 </head>
 
 <body>
-    <form hx-post="/contact.php">
-        <label for="name">Name: <input id="name" type="text"></label>
+    <form hx-post="/contact.php" hx-target="#contacts">
+        <label>Name: <input name="name" type="text"></label>
         <br />
-        <label for="email">Email: <input id="email" type="email"></label>
+        <label>Email: <input name="email" type="email"></label>
+        <br />
+        <button type="submit">Submit</button>
     </form>
     <hr />
-    @foreach $contacts as $contact
-    <div hx-get="/contact.php">
-        <h2>{{ $name }}</h2>
-        <p>{{ $email }}</p>
-    </div>
-    @end
+    <div id="contacts">@render contacts</div>
 </body>
 
 <style>
-    label input {
+    label:has(input) {
         margin: 10px;
         cursor: pointer;
     }
 
     input {
         padding: 5px;
+        margin: 10px;
         border-radius: 5px;
         border: 1px solid #ccc;
+    }
+
+    button[type="submit"] {
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
     }
 </style>
 
 </html>
+
+@block contacts
+@foreach $contacts as $contact
+<div hx-get="/contact.php">
+    <h2>{{ $name }}</h2>
+    <p>{{ $email }}</p>
+</div>
+@endfor
+@endblock
