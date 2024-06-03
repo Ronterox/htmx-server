@@ -4,12 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Htmx and Php</title>
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
 </head>
 
 <body>
-    Count {{ $count }}
-    <button>Increment</button>
+    @render count
 </body>
 
 </html>
+
+@block count
+    Count {{ $count }}
+    <button hx-post="/count.php" hx-target="body">Increment</button>
+@end

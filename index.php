@@ -1,25 +1,11 @@
 <?php
 
-function view($file, $data = []) {
-    $path = __DIR__ . '/html/' . $file;
-    $cache = __DIR__ . '/cache/' . md5($file) . '.php';
+include 'view.php';
 
-    extract($data);
+session_start();
 
-    if (file_exists($cache) && filemtime($cache) >= filemtime($path)) {
-        require $cache;
-        return;
-    }
+$counter = $_SESSION['counter'] ?? 0;
 
-    $file = file_get_contents($path);
-    $file = preg_replace('/{{\s*(.*?)\s*}}/', '<?php echo $1; ?>', $file);
+view('index.html', 'all', ['count' => $counter]);
 
-    @mkdir(__DIR__ . '/cache');
-    file_put_contents($cache, $file);
-
-    require $cache;
-}
-
-view('index.html', ['count' => '1']);
-
-?>
+$_SESSION['counter'] = $counter;
