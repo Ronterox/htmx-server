@@ -23,13 +23,17 @@ function view($file, $block = 'all', $data = [])
     if ($matches > 0) {
         $blocks = array_combine($blocks[1], $blocks[2]);
 
+        for ($i = 0; $i < 2; $i++) {
+            foreach ($blocks as $name => $content) {
+                $file = preg_replace("/@render \b{$name}\b/", $content, $file);
+            }
+        }
+
         if (key_exists($block, $blocks)) {
-            $file = $blocks[$block];
+            preg_match("/@block\s+{$block}\s+(.*?)\s+@endblock/s", $file, $match);
+            $file = $match[1];
         } else {
             $file = preg_replace($block_pattern, '', $file);
-            foreach ($blocks as $name => $content) {
-                $file = str_replace("@render {$name}", $content, $file);
-            }
         }
     }
 

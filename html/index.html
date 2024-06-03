@@ -6,83 +6,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Htmx and Php</title>
     <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+
+    <style>
+        label:has(input) {
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        input {
+            padding: 5px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        form {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: inline-block;
+        }
+
+        form>button {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            float: inline-end;
+        }
+
+        #contacts {
+            max-height: 80vh;
+            overflow-y: auto;
+            scroll-snap-align: start;
+            scroll-snap-type: y mandatory;
+            scroll-snap-stop: always;
+            counter-reset: contact;
+        }
+
+        #contacts>div {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            counter-increment: contact;
+            position: sticky;
+            top: calc(counter(contact) * 100px);
+        }
+
+        #contacts>div::before {
+            content: counter(contact);
+            margin-right: 10px;
+        }
+    </style>
+
 </head>
 
 <body>
-    <form hx-post="/contact.php" hx-target="#contacts">
+    <form hx-post="/contact.php" hx-swap="none">
         <label>Name: <input name="name" type="text"></label>
         <br />
         <label>Email: <input name="email" type="email"></label>
         <br />
+        <button hx-target="body" hx-swap="outerHTML" hx-delete="/contact.php">Reset</button>
         <button type="submit">Submit</button>
     </form>
     <hr />
-    <div id="contacts">@render contacts</div>
+    <section id="contacts">@render contacts</section>
 </body>
-
-<style>
-    label:has(input) {
-        margin: 10px;
-        cursor: pointer;
-    }
-
-    input {
-        padding: 5px;
-        margin: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-
-    form {
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        display: inline-block;
-    }
-
-    button[type="submit"] {
-        padding: 5px 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        float: inline-end;
-    }
-
-    #contacts {
-        max-height: 80vh;
-        overflow-y: auto;
-        scroll-snap-align: start;
-        scroll-snap-type: y mandatory;
-        scroll-snap-stop: always;
-        counter-reset: contact;
-    }
-
-    #contacts>div {
-        margin: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
-        counter-increment: contact;
-        position: sticky;
-        top: calc(counter(contact) * 100px);
-    }
-
-    #contacts>div::before {
-        content: counter(contact);
-        margin-right: 10px;
-    }
-</style>
 
 </html>
 
-@block contacts
-@foreach $contacts as $contact
+@block contact
 <div hx-get="/contact.php">
     <h2>{{ $name }}</h2>
     <p>{{ $email }}</p>
 </div>
+@endblock
+
+@block oob-contact
+<section id="contacts" hx-swap-oob="afterbegin">
+    @render contact
+</section>
+@endblock
+
+@block contacts
+@foreach $contacts as $contact
+<div hx-get="/contact.php">
+    @render contact
+</div>
 @endfor
+@endblock
+
+@block test
+<div>
+    <h1>__TESTING__</h1>
+</div>
 @endblock
