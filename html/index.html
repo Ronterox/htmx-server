@@ -9,12 +9,12 @@
 </head>
 
 <body>
-    @render count
+    <div id='count'>@render count</div>
+    <button hx-post="/count.php" hx-target="#count">Increment</button>
 </body>
 
 </html>
 
 @block count
     Count {{ $count }}
-    <button hx-post="/count.php" hx-target="body">Increment</button>
 @end
