@@ -85,7 +85,7 @@
         <br />
         <label>Email: <input name="email" type="email"></label>
         <br />
-        <button hx-target="body" hx-swap="outerHTML" hx-delete="/contact.php">Reset</button>
+        <button hx-target="body" hx-swap="outerHTML" hx-delete="/contact.php?id=all">Reset</button>
         <button type="submit">Submit</button>
     </form>
     <hr />
@@ -100,7 +100,7 @@
         <h2>{{ $name }}</h2>
         <p>{{ $email }}</p>
     </address>
-    <picture class="icon" hx-delete="/contact.php" hx-target="closest div" hx-swap="outerHTML">
+    <picture class="icon" hx-delete="/contact.php?id={{ $id }}" hx-target="closest div" hx-swap="outerHTML">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="3 6 5 6 21 6" />
