@@ -16,7 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     array_push($_SESSION['contacts'], $contact);
     view('index.html', 'oob-contact', $contact);
 } elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    session_unset();
-    session_destroy();
-    view('index.html', 'all');
+    if ($_REQUEST['id'] === 'all') {
+        session_unset();
+        session_destroy();
+        view('index.html', 'all');
+    }
 }

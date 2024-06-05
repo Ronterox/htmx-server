@@ -1,0 +1,5 @@
+#!/bin/env bash
+
+tmux-send-cmd 'server' 'php -S localhost:8000'
+
+nvim .
