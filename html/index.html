@@ -102,8 +102,16 @@
             color: white;
         }
     </style>
-    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <script defer src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+    <script defer src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+    <script defer type="text/hyperscript">
+        behavior count
+            on load
+            set tag to my tagName.toLowerCase()
+            make a <span/> put it at the end of me
+            append '(' + my innerText.length + ')' to it
+        end
+    </script>
 </head>
 
 <body>
@@ -152,8 +160,8 @@
     <address _="
         on click set the value of #filter to the innerText of the next <h2/>
         within me with wrapping then send keyup to #filter">
-        <h2>{{ $name }}</h2>
-        <a href="mailto:{{ $email }}">{{ $email }}</a>
+        <h2 _="install count">{{ $name }}</h2>
+        <a _="install count" href="mailto:{{ $email }}">{{ $email }}</a>
     </address>
     <button _="on click make a <div/> put it after my parentNode then put my parentNode's innerHTML into it">Copy</button>
     <picture class="del-icon" hx-delete="/contact.php?id={{ $id }}" hx-target="closest div" hx-swap="delete">
