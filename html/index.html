@@ -5,12 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Htmx and Php</title>
-    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
-
     <style>
-        label:has(input) {
-            margin: 10px;
-            cursor: pointer;
+        a {
+            text-decoration: underline;
         }
 
         input {
@@ -40,6 +37,11 @@
             float: inline-end;
         }
 
+        label:has(input) {
+            margin: 10px;
+            cursor: pointer;
+        }
+
         #contacts {
             max-height: 80vh;
             overflow-y: auto;
@@ -57,7 +59,9 @@
             background-color: #f9f9f9;
             counter-increment: contact;
             position: sticky;
-            top: calc(counter(contact) * 100px);
+            display: flex;
+            overflow: hidden;
+            transition: padding .1s;
         }
 
         #contacts>div::before {
@@ -65,7 +69,13 @@
             margin-right: 10px;
         }
 
-        .icon {
+        #contacts>div:hover {
+            padding: 25px;
+            cursor: pointer;
+            border: 1px solid #000;
+        }
+
+        .del-icon {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -73,10 +83,14 @@
             color: red;
             width: 50px;
             height: 50px;
-            cursor: pointer;
+        }
+
+        .del-icon:hover svg {
+            color: white;
         }
     </style>
-
+    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 </head>
 
 <body>
@@ -89,18 +103,41 @@
         <button type="submit">Submit</button>
     </form>
     <hr />
+    <input type="text" placeholder="filter contacts..."
+        _="
+        on keyup
+
+        show <div/> in #contacts
+        when its textContent.toLowerCase() contains my value.toLowerCase()
+
+        for div in (<div/> in #contacts)
+            if not div's *display
+                for child in (the children of the first of div)
+                    set highlight to ''
+                    set rest to ''
+                    repeat in (innerText of child)
+                        if rest is empty and (my value).toLowerCase() contains (highlight + it).toLowerCase()
+                            append it to highlight
+                        else
+                            append it to rest
+                    end
+                    put `<mark>${highlight}</mark>${rest}` into child
+                end
+        end
+        "
+    />
     <section id="contacts">@render contacts</section>
 </body>
 
 </html>
 
 @block contact
-<div style="display: flex;">
+<div>
     <address>
         <h2>{{ $name }}</h2>
-        <p>{{ $email }}</p>
+        <a href="mailto:{{ $email }}">{{ $email }}</a>
     </address>
-    <picture class="icon" hx-delete="/contact.php?id={{ $id }}" hx-target="closest div" hx-swap="outerHTML">
+    <picture class="del-icon" hx-delete="/contact.php?id={{ $id }}" hx-target="closest div" hx-swap="delete">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="3 6 5 6 21 6" />
