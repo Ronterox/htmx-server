@@ -11,6 +11,7 @@
         }
 
         input {
+            height: 20px;
             padding: 5px;
             margin: 10px;
             border-radius: 5px;
@@ -33,6 +34,10 @@
             cursor: pointer;
         }
 
+        div>address {
+            width: 100%;
+        }
+
         button[type="submit"] {
             float: inline-end;
         }
@@ -52,8 +57,8 @@
         }
 
         #filter {
-            height: 50px;
             width: 30%;
+            padding: 10px;
             font-size: 1.5em;
         }
 
@@ -66,6 +71,7 @@
             counter-increment: contact;
             position: sticky;
             display: flex;
+            justify-content: space-between;
             overflow: hidden;
             transition: padding .1s;
         }
@@ -142,13 +148,14 @@
 </html>
 
 @block contact
-<div _="
-    on click set the value of #filter to the innerText of the next <h2/>
-    within me with wrapping then send keyup to #filter">
-    <address>
+<div>
+    <address _="
+        on click set the value of #filter to the innerText of the next <h2/>
+        within me with wrapping then send keyup to #filter">
         <h2>{{ $name }}</h2>
         <a href="mailto:{{ $email }}">{{ $email }}</a>
     </address>
+    <button _="on click make a <div/> put it after my parentNode then put my parentNode's innerHTML into it">Copy</button>
     <picture class="del-icon" hx-delete="/contact.php?id={{ $id }}" hx-target="closest div" hx-swap="delete">
         @render trash
     </picture>

@@ -1,6 +1,6 @@
 <?php
 
-include 'view.php';
+require 'view.php';
 
 session_start();
 
